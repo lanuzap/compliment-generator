@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>100 Degrees of Kindness - Deluxe</title>
-    <!-- Google Fonts -->
+    <title>The Happiness Deck</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&family=Quicksand:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #FF6B6B;
-            --secondary: #4ECDC4;
-            --highlight: #FFE66D;
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --accent-red: #FF6B6B;
+            --accent-blue: #4ECDC4;
+            --card-white: #ffffff;
             --text-dark: #2D3436;
+            /* Standard Poker Card Ratio ~2.5:3.5 */
+            --card-w: 350px;
+            --card-h: 490px;
         }
 
         * {
@@ -27,399 +28,368 @@
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
             font-family: 'Quicksand', sans-serif;
-            background: #f0f2f5;
+            background: #0f172a;
             overflow: hidden;
-            position: relative;
+            perspective: 1000px;
         }
 
-        /* --- VIBRANT ANIMATED BACKGROUND --- */
+        /* --- HYPER-VISUAL BACKGROUND --- */
         .bg-wrapper {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
-            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
         }
 
-        .orb {
+        .stars {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            z-index: -1;
-            animation: orbMove 20s infinite alternate ease-in-out;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: starMove 100s linear infinite;
+            opacity: 0.3;
         }
 
-        .orb-1 { width: 500px; height: 500px; background: #FF9A9E; top: -10%; left: -10%; }
-        .orb-2 { width: 600px; height: 600px; background: #A18CD1; bottom: -20%; right: -10%; animation-delay: -5s; }
-        .orb-3 { width: 400px; height: 400px; background: #84FAB0; top: 40%; right: -5%; animation-delay: -10s; }
-
-        @keyframes orbMove {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(100px, 50px) scale(1.1); }
-            100% { transform: translate(-50px, 100px) scale(0.9); }
+        @keyframes starMove {
+            from { transform: translate(0, 0); }
+            to { transform: translate(-50%, -50%); }
         }
 
-        /* --- MAIN PORTRAIT CONTAINER --- */
+        .aurora {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: linear-gradient(45deg, rgba(78, 205, 196, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+            filter: blur(100px);
+            animation: auroraShift 20s infinite alternate;
+        }
+
+        @keyframes auroraShift {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.5) translate(5%, 5%); }
+        }
+
+        /* --- PLAYING CARD CONTAINER --- */
         .card {
-            background: var(--glass-bg);
-            width: 100%;
-            max-width: 380px; 
-            height: 640px;
-            border-radius: 45px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
+            background: var(--card-white);
+            width: var(--card-w);
+            height: var(--card-h);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.05);
+            position: relative;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            padding: 4rem 2.5rem;
-            text-align: center;
-            position: relative;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            padding: 40px;
+            transition: transform 0.1s ease-out;
+            border: 8px solid white;
             z-index: 10;
-            overflow: hidden;
+            overflow: hidden; /* Ensures corners stay within the radius */
         }
 
-        /* Animated shine sweep effect */
-        .card::before {
-            content: '';
+        /* Card Corner Circles - Smaller and clearly inside */
+        .corner {
             position: absolute;
-            top: -150%;
-            left: -150%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(45deg);
-            animation: shine 8s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes shine {
-            0% { left: -150%; top: -150%; }
-            20% { left: 150%; top: 150%; }
-            100% { left: 150%; top: 150%; }
-        }
-
-        .header-label {
-            font-family: 'Outfit', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            font-size: 0.7rem;
-            font-weight: 900;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .emoji-container {
-            font-size: 5rem;
-            margin: 1.5rem 0;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
-            z-index: 2;
-        }
-
-        .text-section {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 0;
-        }
-
-        #compliment-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            line-height: 1.3;
-            color: var(--text-dark);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        /* --- INTERACTIVE BUTTON --- */
-        .btn-wrapper {
-            width: 100%;
-            position: relative;
-        }
-
-        .btn-main {
-            background: var(--accent);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 1.4rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 900;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            z-index: 5;
-        }
-
-        .btn-main:hover {
-            transform: translateY(-5px) scale(1.02);
-            background: #ff5252;
-            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.5);
-        }
-
-        .btn-main:active {
-            transform: translateY(0) scale(0.95);
-        }
-
-        /* --- PARTICLE SYSTEM --- */
-        .particle {
-            position: absolute;
-            pointer-events: none;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            z-index: 100;
-            animation: particleOut 1s ease-out forwards;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 11;
         }
 
-        @keyframes particleOut {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        .tr { top: 15px; right: 15px; }
+        .bl { bottom: 15px; left: 15px; }
+
+        .card-inner {
+            text-align: center;
+            width: 100%;
+            z-index: 12;
         }
+
+        #display-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            line-height: 1.3;
+            transition: all 0.4s ease;
+        }
+
+        .punchline {
+            margin-top: 1.5rem;
+            color: var(--accent-red);
+            font-size: 1.3rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .punchline.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- CONTROLS OUTSIDE CARD --- */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 20;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-compliment { background: var(--accent-blue); }
+        .btn-joke { background: var(--accent-red); }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .btn:active { transform: translateY(0); }
 
         /* Animation Classes */
-        .hidden { opacity: 0; transform: scale(0.9) translateY(10px); filter: blur(10px); }
-        .pop { animation: popAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .fade-out { opacity: 0; transform: scale(0.95); }
 
-        @keyframes popAnim {
-            0% { transform: scale(0) rotate(-15deg); }
-            70% { transform: scale(1.2) rotate(5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        @media (max-height: 700px) {
-            .card { height: 95vh; padding: 2rem 1.5rem; }
-            .emoji-container { font-size: 4rem; height: 80px; }
-            #compliment-text { font-size: 1.5rem; }
+        @media (max-width: 400px) {
+            :root {
+                --card-w: 300px;
+                --card-h: 420px;
+            }
+            .controls { flex-direction: column; width: 300px; }
+            .btn { width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-wrapper">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+        <div class="stars"></div>
+        <div class="aurora"></div>
     </div>
 
     <main class="card" id="card">
-        <div class="header-section">
-            <span class="header-label">Vibe Check</span>
-            <div id="emoji-slot" class="emoji-container pop">✨</div>
-        </div>
-        
-        <div class="text-section">
-            <p id="compliment-text">Ready for some high-quality positivity?</p>
-        </div>
+        <!-- Corners -->
+        <div id="corner-tr" class="corner tr">✨</div>
+        <div id="corner-bl" class="corner bl">✨</div>
 
-        <div class="btn-wrapper">
-            <button id="get-compliment-btn" class="btn-main">
-                Boost My Mood
-            </button>
+        <div class="card-inner">
+            <p id="display-text">Pick a card, any card!</p>
+            <p id="punchline-text" class="punchline"></p>
         </div>
     </main>
+
+    <div class="controls">
+        <button id="btn-comp" class="btn btn-compliment">Quirky Compliment</button>
+        <button id="btn-joke" class="btn btn-joke">Family Joke</button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const compliments = [
                 "You're the human version of a warm towel out of the dryer.",
-                "If you were a vegetable, you'd be a 'cute-cumber'.",
-                "You’re a smart cookie.",
-                "Your perspective is refreshing.",
-                "You have the best laugh.",
-                "You’re more helpful than you realize.",
-                "You're a candle in the darkness.",
-                "You have a great sense of humor!",
-                "Your smile is contagious.",
-                "You're even more beautiful on the inside than you are on the outside.",
-                "You’re like sunshine on a rainy day.",
-                "You are the 'Expected' in a world of 'Exceptions'.",
-                "Being around you is like a happy little vacation.",
-                "You're better than a triple-scoop ice cream cone. With sprinkles.",
-                "You’re someone’s reason to smile today.",
-                "You're a gift to those around you.",
-                "Your brain is fascinating.",
-                "You're like the perfect playlist: you just get better with every song.",
-                "You’re the color pink in a black and white world.",
-                "If you were a fruit, you'd be a fine-apple.",
-                "You have impeccable manners.",
-                "I bet you make babies smile effortlessly.",
-                "You’re a great listener.",
+                "If you were a potato, you'd be a sweet one.",
+                "You're like a software update that actually fixes things.",
+                "I bet you're the person who knows the exact right time to take cookies out of the oven.",
                 "You're more fun than bubble wrap.",
-                "Your hair looks incredible today.",
-                "You're the kind of person who makes 'hard work' look easy.",
-                "Everything would be better if more people were like you.",
-                "You’re a master of awkward-silence-breaking.",
-                "You have a way of making everyone feel included.",
-                "Your soul is gorgeous.",
-                "You're an awesome friend.",
-                "You're the person Google would hire to write 'How to be Awesome'.",
-                "You're like a high-five for the soul.",
-                "You're remarkably brave.",
-                "I bet you're the person who knows all the best secrets.",
-                "You’re an innovator.",
-                "You're the type of person who finds the silver lining in every cloud.",
-                "You have a great sense of style.",
-                "I appreciate you.",
-                "You're really good at all the things you do.",
-                "You make the small things feel significant.",
-                "You have the best ideas.",
-                "You’re always so kind to strangers.",
-                "You're a conversation starter.",
-                "You're like a breath of fresh air.",
-                "You're more precious than a 'limited edition' anything.",
-                "You're a ray of light.",
-                "You're a trendsetter.",
-                "You're the 'cool' in 'cool as a cucumber'.",
-                "You're better than a warm blanket on a cold night.",
-                "You have a natural talent for making people feel comfortable.",
-                "You’re an inspiration.",
-                "You're a game changer.",
-                "You're a total catch.",
-                "You're like a rainbow in a storm.",
-                "You make mundane tasks feel like adventures.",
-                "You're the cherry on top of a great day.",
-                "You're the 'best' in 'best case scenario'.",
-                "You're like a cozy fireplace on a snowy night.",
-                "You have a heart of gold.",
-                "You're the 'gold star' of humans.",
-                "You're a masterpiece.",
-                "You're a wizard at making things happen.",
-                "You're like a perfect cup of tea.",
-                "You're a total rockstar.",
-                "You're the person everyone wants on their team.",
-                "You're like a bright morning sun.",
-                "You're a legend in the making.",
-                "You're a joy to be around.",
-                "You're more valuable than a pile of gold.",
-                "You're the 'top' in 'top-notch'.",
-                "You're like a beautiful song that never gets old.",
-                "You're a true original.",
-                "You're a superstar.",
-                "You're the 'magic' in 'magic trick'.",
-                "You're like a field of wildflowers.",
-                "You're a gem.",
-                "You're the 'spark' in 'sparkle'.",
-                "You're like a warm hug.",
-                "You're a treasure.",
-                "You're the 'wow' in 'wonderful'.",
-                "You're like a clear blue sky.",
-                "You're a phenomenon.",
-                "You're the 'best' in 'best-selling'.",
-                "You're like a gentle breeze.",
-                "You're a marvel.",
-                "You're the 'extra' in 'extraordinary'.",
-                "You're like a star in the night sky.",
-                "You're a wonder.",
-                "You're the 'super' in 'superhero'.",
-                "You're like a dream come true.",
-                "You're a delight.",
-                "You're the 'ace' in 'ace of spades'.",
-                "You're like a masterpiece in a gallery.",
-                "You're a champion.",
-                "You're the 'bright' in 'bright idea'.",
-                "You're like a breath of fresh air.",
-                "You're a marvel.",
-                "You're the 'best' in 'best-ever'.",
-                "You're a literal Wi-Fi signal in a dead zone.",
-                "Your vibe is simply unmatched.",
-                "You are the 'Pew' in 'Pew Pew!'.",
-                "I bet you give the world's best high-fives.",
-                "You're more fun than a ball pit full of puppies.",
-                "You're the reason people believe in kindness.",
-                "Your brain is a treasure chest of cool ideas.",
-                "You're better than a long-lost 20 dollar bill.",
+                "You have the coordination of a majestic giraffe.",
+                "If you were a fruit, you'd be a fine-apple.",
+                "I'd trust you with my Netflix password.",
+                "You're the 'Expected' in a world of 'Exceptions'.",
+                "You're like finding a $20 bill in your old jeans.",
+                "You're the reason I check the 'Good Vibes' playlist.",
+                "I'd share my last piece of pizza with you. Probably.",
+                "You have the best 'surprised' face.",
+                "You're like a Wi-Fi signal in a dead zone: a total lifesaver.",
+                "If you were a dog, you'd be the 'Best in Show' every time.",
+                "You're the only person I'd share my favorite pen with.",
                 "You're the 'skip intro' button of life.",
-                "You're the masterpiece that everyone's talking about."
+                "You're better than a triple-scoop ice cream cone. With sprinkles.",
+                "You have impeccable manners, even when you're hungry.",
+                "You're like a high-five for the soul.",
+                "Your brain is a treasure chest of cool, slightly weird ideas.",
+                "You're the human equivalent of a perfect Sunday morning.",
+                "You're remarkably brave, especially for someone who sees spiders.",
+                "I bet you make babies smile effortlessly.",
+                "You're the 'gold star' of humans.",
+                "You're like a song that makes everyone want to dance badly.",
+                "Your sense of humor is a national treasure.",
+                "You're the reason the aliens haven't invaded yet.",
+                "You're more precious than a 'limited edition' anything.",
+                "You're the 'cool' in 'cool as a cucumber'.",
+                "You're like sunshine on a rainy day, but without the humidity.",
+                "You're the secret ingredient in everyone's favorite recipe.",
+                "You make mundane tasks feel like a 90s montage.",
+                "You're the cherry on top of a very tall sundae.",
+                "You're like a cozy fireplace, but portable.",
+                "You're a wizard at making things happen (legally, hopefully).",
+                "You're like a perfect cup of tea—warm and comforting.",
+                "You're the person everyone secretly wants on their trivia team.",
+                "You're like a beautiful song that never gets stuck in a bad way.",
+                "You're a superstar, even in your pajamas.",
+                "You're the 'magic' in a world of 'muggles'.",
+                "You're like a field of wildflowers in a concrete jungle.",
+                "You're a gem, and not the fake kind from a plastic ring.",
+                "You're the 'spark' in 'sparkle'. Literally.",
+                "You're like a warm hug for the brain.",
+                "You're the 'wow' in 'wonderful'.",
+                "You're like a clear blue sky on a day everyone expected rain.",
+                "You're the 'best' in 'best-case scenario'.",
+                "You're like a gentle breeze in a heatwave.",
+                "You're a total rockstar (even if you only sing in the shower)."
             ];
 
-            const emojis = ["💎", "🔥", "🦄", "🌈", "🍦", "🍭", "🌻", "🎈", "🚀", "🍕", "🐾", "🍰", "🍩", "🍀", "🎉", "🌟", "🐱", "🐥", "👾", "🎸"];
+            const jokes = [
+                { s: "Why did the scarecrow win an award?", p: "Because he was outstanding in his field!" },
+                { s: "What do you call a fake noodle?", p: "An impasta!" },
+                { s: "Why don't scientists trust atoms?", p: "Because they make up everything!" },
+                { s: "What did the ocean say to the beach?", p: "Nothing, it just waved." },
+                { s: "Why did the melon jump into the lake?", p: "It wanted to be a water-melon!" },
+                { s: "What do you call a bear with no teeth?", p: "A gummy bear!" },
+                { s: "Why did the bicycle fall over?", p: "Because it was two-tired!" },
+                { s: "How do you organize a space party?", p: "You planet!" },
+                { s: "What do you call a sleeping dinosaur?", p: "A dino-snore!" },
+                { s: "Why can't you give Elsa a balloon?", p: "Because she will let it go!" },
+                { s: "What do you call an alligator in a vest?", p: "An investigator!" },
+                { s: "Why did the cookie go to the doctor?", p: "Because he was feeling crumbly!" },
+                { s: "What do you call a sheep with no legs?", p: "A cloud!" },
+                { s: "Why did the math book look so sad?", p: "Because it had so many problems." },
+                { s: "What do you call a fly with no wings?", p: "A walk!" },
+                { s: "Why did the tomato turn red?", p: "Because it saw the salad dressing!" },
+                { s: "What do you call a dog that does magic tricks?", p: "A labracadabrador!" },
+                { s: "Why are elevator jokes so classic?", p: "They work on so many levels." },
+                { s: "What did one plate say to the other?", p: "Dinner is on me!" },
+                { s: "Why did the spider get a job in IT?", p: "He was a great web designer!" },
+                { s: "What do you call a cow with no legs?", p: "Ground beef!" },
+                { s: "Why did the golfer bring two pairs of pants?", p: "In case he got a hole in one!" },
+                { s: "What's orange and sounds like a parrot?", p: "A carrot!" },
+                { s: "How does a penguin build its house?", p: "Igloos it together!" },
+                { s: "What did the teacher do with the student's window report?", p: "She looked right through it!" },
+                { s: "Why don't skeletons fight each other?", p: "They don't have the guts." },
+                { s: "What do you call a pig that knows karate?", p: "A pork chop!" },
+                { s: "Why was the belt arrested?", p: "For holding up a pair of pants!" },
+                { s: "What do you call a cold dog?", p: "A chili dog!" },
+                { s: "How do you catch a squirrel?", p: "Climb a tree and act like a nut!" },
+                { s: "Why did the stadium get hot after the game?", p: "All the fans left!" },
+                { s: "What do you call a factory that makes okay products?", p: "A satisfactory!" },
+                { s: "Why did the picture go to jail?", p: "Because it was framed!" },
+                { s: "What do you call a pile of kittens?", p: "A meow-ntain!" },
+                { s: "Why did the gym close down?", p: "It just didn't work out!" },
+                { s: "How do celebrities stay cool?", p: "They have many fans!" },
+                { s: "What do you call an elephant that doesn't matter?", p: "An irrelephant!" },
+                { s: "Why was the broom late?", p: "It over-swept!" },
+                { s: "What kind of shoes do ninjas wear?", p: "Sneakers!" },
+                { s: "Why did the mushroom go to the party?", p: "Because he was a fungi!" },
+                { s: "What did the sink say to the toilet?", p: "You look flushed!" },
+                { s: "Why do seagulls fly over the sea?", p: "Because if they flew over the bay, they'd be bagels!" },
+                { s: "What do you call a boomeranging joke?", p: "A joke that comes back to you!" },
+                { s: "Why did the lamp go to school?", p: "It wanted to be bright!" },
+                { s: "What do you call a person who is afraid of Santa?", p: "Claustrophobic!" },
+                { s: "Why did the banana go to the doctor?", p: "It wasn't peeling well!" },
+                { s: "How do you make a tissue dance?", p: "Put a little boogey in it!" },
+                { s: "What do you call a horse that lives next door?", p: "A neighbor!" },
+                { s: "Why did the cat sit on the computer?", p: "To keep an eye on the mouse!" },
+                { s: "What did the buffalo say to his son when he left?", p: "Bison!" }
+            ];
 
-            const complimentDisplay = document.getElementById('compliment-text');
-            const emojiDisplay = document.getElementById('emoji-slot');
-            const generateBtn = document.getElementById('get-compliment-btn');
+            const cornerEmojis = ["🃏", "♣️", "♥️", "♠️", "♦️", "👑", "🍀", "💎", "⭐", "🔥", "🦄", "🌈", "🍕", "🎸", "🚀", "🍦"];
+            const cornerColors = ["#FF6B6B", "#4ECDC4", "#FFE66D", "#A18CD1", "#FAD0C4", "#84FAB0", "#FF9F43", "#54a0ff"];
+
+            const display = document.getElementById('display-text');
+            const punchline = document.getElementById('punchline-text');
             const card = document.getElementById('card');
+            const cornerTR = document.getElementById('corner-tr');
+            const cornerBL = document.getElementById('corner-bl');
+            
+            const btnComp = document.getElementById('btn-comp');
+            const btnJoke = document.getElementById('btn-joke');
 
-            let lastIndex = -1;
+            let lastIdx = -1;
+            let punchlineTimer = null;
 
-            // Sparkle Particle Effect
-            function createParticles(x, y) {
-                const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A1C4FD', '#FFA07A'];
-                for (let i = 0; i < 15; i++) {
-                    const p = document.createElement('div');
-                    p.className = 'particle';
-                    const size = Math.random() * 10 + 5;
-                    p.style.width = `${size}px`;
-                    p.style.height = `${size}px`;
-                    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    p.style.left = `${x}px`;
-                    p.style.top = `${y}px`;
-                    
-                    const tx = (Math.random() - 0.5) * 300;
-                    const ty = (Math.random() - 0.5) * 300;
-                    p.style.setProperty('--tx', `${tx}px`);
-                    p.style.setProperty('--ty', `${ty}px`);
-                    
-                    document.body.appendChild(p);
-                    setTimeout(() => p.remove(), 1000);
-                }
+            function randomizeCorners() {
+                // Select ONE color and ONE icon per generation
+                const color = cornerColors[Math.floor(Math.random() * cornerColors.length)];
+                const icon = cornerEmojis[Math.floor(Math.random() * cornerEmojis.length)];
+                
+                [cornerTR, cornerBL].forEach(el => {
+                    el.style.backgroundColor = color;
+                    el.textContent = icon;
+                    // Reset animation
+                    el.style.transform = `scale(0.8)`;
+                    setTimeout(() => el.style.transform = `scale(1)`, 50);
+                });
             }
 
-            function generateNewCompliment(e) {
-                // Get button center for particle burst
-                const rect = generateBtn.getBoundingClientRect();
-                const x = rect.left + rect.width / 2;
-                const y = rect.top + rect.height / 2;
-                createParticles(x, y);
-
-                // UI feedback
-                complimentDisplay.classList.add('hidden');
-                emojiDisplay.style.animation = 'none';
-                emojiDisplay.offsetHeight; /* trigger reflow */
+            function updateCard(type) {
+                // Reset UI
+                if (punchlineTimer) clearTimeout(punchlineTimer);
+                display.classList.add('fade-out');
+                punchline.classList.remove('visible');
                 
                 setTimeout(() => {
-                    let randomIndex;
-                    do {
-                        randomIndex = Math.floor(Math.random() * compliments.length);
-                    } while (randomIndex === lastIndex);
-                    lastIndex = randomIndex;
-
-                    complimentDisplay.textContent = compliments[randomIndex];
-                    emojiDisplay.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    randomizeCorners();
                     
-                    complimentDisplay.classList.remove('hidden');
-                    emojiDisplay.style.animation = null;
-                    emojiDisplay.classList.add('pop');
+                    if (type === 'comp') {
+                        let idx;
+                        do { idx = Math.floor(Math.random() * compliments.length); } while (idx === lastIdx);
+                        lastIdx = idx;
+                        display.textContent = compliments[idx];
+                        punchline.textContent = "";
+                    } else {
+                        let idx;
+                        do { idx = Math.floor(Math.random() * jokes.length); } while (idx === lastIdx);
+                        lastIdx = idx;
+                        display.textContent = jokes[idx].s;
+                        punchline.textContent = jokes[idx].p;
+                        
+                        punchlineTimer = setTimeout(() => {
+                            punchline.classList.add('visible');
+                        }, 1800);
+                    }
+                    
+                    display.classList.remove('fade-out');
                 }, 300);
             }
 
-            generateBtn.addEventListener('click', generateNewCompliment);
-            
-            // Mouse Parallax for the Card
+            btnComp.addEventListener('click', () => updateCard('comp'));
+            btnJoke.addEventListener('click', () => updateCard('joke'));
+
+            // Card 3D tilt effect
             document.addEventListener('mousemove', (e) => {
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
                 card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
         });
